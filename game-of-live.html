@@ -42,6 +42,7 @@ function isCellAlive(x, y) {
 
 function getNextState(cell) {
   var aliveNeighbours = getNumberOfAliveNeighbours(cell);
+  console.log(aliveNeighbours+ ' '+ getCellCoordinate(cell)['x'] + ' '+ getCellCoordinate(cell)['y'])
   if (aliveNeighbours <= 1 || aliveNeighbours >= 4) {
     return "dead";
   }
@@ -60,7 +61,7 @@ function getNumberOfAliveNeighbours(cell) {
   for (var i = -1; i <= 1; i++) {
     for (var j = -1; j <= 1; j++) {
       var neighbour_x = coord['x']+i, neighbour_y = coord['y']+j;
-      if (neighbour_x >= 0 && neighbour_x < max_x && neighbour_y >=0 && neighbour_y < max_y) {
+      if (neighbour_x >= 0 && neighbour_x < max_x && neighbour_y >=0 && neighbour_y < max_y && (i!=0||j!=0) ) {
         if (isCellAlive(neighbour_x,neighbour_y)) {
           aliveNeighbours += 1;
         }
@@ -92,12 +93,12 @@ $(document).ready(function(){
   $('#start').click(function() {
     var nextStates = {}
     $('.cell').each(function(index) {
-      console.log(index + ' ' + getCellCoordinate(this)['x'] + ' ' + getCellCoordinate(this)['y'])
+      //console.log(index + ' ' + getCellCoordinate(this)['x'] + ' ' + getCellCoordinate(this)['y'])
       nextStates[index] = getNextState(this); 
     });
     //console.log(nextStates)
     $('.cell').each(function(index) {
-      console.log(index + ' ' + getCellCoordinate(this)['x'] + ' ' + getCellCoordinate(this)['y'])
+      //console.log(index + ' ' + getCellCoordinate(this)['x'] + ' ' + getCellCoordinate(this)['y'])
       processCell(nextStates[index], this); 
     });
   })
@@ -107,7 +108,7 @@ $(document).ready(function(){
 </head>
 <body>
   <h1 style="">Game of Life</h1>
-  <button id="start">Start simulation</button>
+  <button id="start">Next state</button>
   <br></br>
   <table id="board">
   </table>

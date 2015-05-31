@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Game of Life</title>
+<style>
+	td.cell {
+    background-color:lightgray;
+		width: 20px;
+    height: 20px;
+	}
+
+  td.dead {
+    
+  }
+
+  td.alive {
+    background-color:black;
+  }
+	
+</style>
+<script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+
+<script type="text/javascript">
+ 
+function drawBoard(x,y) {
+      var boardElements = '';
+      for (i = 0; i < y; i++) {
+        var rows = '<tr>';  
+        for (j = 0; j < x; j++) {
+          rows += '<td class="cell"></td>';
+        }
+        boardElements += rows + '</tr>';
+      }
+      $('#board').html(boardElements);
+    }
+
+$(document).ready(function(){
+    drawBoard(50,50);
+});
+ 
+</script>
+</head>
+<body>
+<h1>Game of Life</h1>
+<table id="board">
+</table>
+</body>
+</html>

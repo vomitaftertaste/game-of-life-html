@@ -23,19 +23,22 @@
 <script type="text/javascript">
  
 function drawBoard(x,y) {
-      var boardElements = '';
-      for (i = 0; i < y; i++) {
-        var rows = '<tr>';  
-        for (j = 0; j < x; j++) {
-          rows += '<td class="cell"></td>';
-        }
-        boardElements += rows + '</tr>';
+  var boardElements = '';
+    for (i = 0; i < y; i++) {
+      var rows = '<tr>';  
+      for (j = 0; j < x; j++) {
+        rows += '<td class="cell"></td>';
       }
-      $('#board').html(boardElements);
+      boardElements += rows + '</tr>';
     }
+    $('#board').html(boardElements);
+}
 
 $(document).ready(function(){
-    drawBoard(50,50);
+    drawBoard(50,20);
+    $('#board').on("click", ".cell", function() {
+      $(this).toggleClass("alive");
+    });
 });
  
 </script>

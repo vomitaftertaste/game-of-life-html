@@ -9,10 +9,6 @@
     height: 20px;
 	}
 
-  td.dead {
-    
-  }
-
   td.alive {
     background-color:black;
   }
@@ -22,30 +18,98 @@
 
 <script type="text/javascript">
  
+var max_x=50, max_y=20;
+
 function drawBoard(x,y) {
   var boardElements = '';
-    for (i = 0; i < y; i++) {
-      var rows = '<tr>';  
-      for (j = 0; j < x; j++) {
-        rows += '<td class="cell"></td>';
-      }
-      boardElements += rows + '</tr>';
+  for (i = 0; i < y; i++) {
+    var rows = '<tr>';  
+    for (j = 0; j < x; j++) {
+      rows += '<td class="cell" data-row="'+ i +'"data-column="'+ j +'" ></td>';
     }
-    $('#board').html(boardElements);
+    boardElements += rows + '</tr>';
+  }
+  $('#board').html(boardElements);
+}
+
+function getCellCoordinate(cell) {
+  return {'x': $(cell).data('column'), 'y':$(cell).data('row')};
+}
+
+function isCellAlive(x, y) {
+  return $('#board').find('td[data-row="' + y + '"][data-column="'+ x +'"]').hasClass('alive');
+}
+
+function getNextState(cell) {
+  var aliveNeighbours = getNumberOfAliveNeighbours(cell);
+  if (aliveNeighbours <= 1 || aliveNeighbours >= 4) {
+    return "dead";
+  }
+  else if (aliveNeighbours == 3) {
+    return "alive";
+  }
+  else {
+    return "no change";
+  }
+} 
+
+function getNumberOfAliveNeighbours(cell) {
+  var coord = getCellCoordinate(cell);
+  var aliveNeighbours = 0;
+
+  for (var i = -1; i <= 1; i++) {
+    for (var j = -1; j <= 1; j++) {
+      var neighbour_x = coord['x']+i, neighbour_y = coord['y']+j;
+      if (neighbour_x >= 0 && neighbour_x < max_x && neighbour_y >=0 && neighbour_y < max_y) {
+        if (isCellAlive(neighbour_x,neighbour_y)) {
+          aliveNeighbours += 1;
+        }
+      }
+    }
+  }
+  return aliveNeighbours;
+}
+
+function processCell(nextState, cell) {
+  //var coord = getCellCoordinate(cell);
+  //console.log( "row: " + coord['x'] + ' column: ' + coord['y'] );
+
+  if (nextState == "alive") {
+    $(cell).addClass("alive");
+  }
+  else if (nextState == "dead") {
+    $(cell).removeClass("alive");
+  }
 }
 
 $(document).ready(function(){
-    drawBoard(50,20);
-    $('#board').on("click", ".cell", function() {
-      $(this).toggleClass("alive");
+  drawBoard(max_x,max_y);
+
+  $('#board').on("click", ".cell", function() {
+    $(this).toggleClass("alive");
+  });
+
+  $('#start').click(function() {
+    var nextStates = {}
+    $('.cell').each(function(index) {
+      console.log(index + ' ' + getCellCoordinate(this)['x'] + ' ' + getCellCoordinate(this)['y'])
+      nextStates[index] = getNextState(this); 
     });
+    //console.log(nextStates)
+    $('.cell').each(function(index) {
+      console.log(index + ' ' + getCellCoordinate(this)['x'] + ' ' + getCellCoordinate(this)['y'])
+      processCell(nextStates[index], this); 
+    });
+  })
 });
  
 </script>
 </head>
 <body>
-<h1>Game of Life</h1>
-<table id="board">
-</table>
+  <h1 style="">Game of Life</h1>
+  <button id="start">Start simulation</button>
+  <br></br>
+  <table id="board">
+  </table>
 </body>
 </html>
